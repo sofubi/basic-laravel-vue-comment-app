@@ -1,23 +1,34 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Example Component</div>
-
-                    <div class="card-body">
-                        I'm an example component.
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
+    import axios from 'axios'
     export default {
         mounted() {
-            console.log('Component mounted.')
+            this.fetchComments();
+        },
+        data() {
+            return {
+                comments: [], 
+                errors: []
+            }
+        },
+        methods: {
+            fetchComments: function() {
+                return axios.get('/comments')
+                    .then((res) => {
+                        this.comments.push(res.data);
+                    }).catch((err) => {
+                        this.errors.push(
+                            {
+                                reason: err,
+                                message: "There was an error fetching comments"
+                            }
+                        )
+                    }) 
+            }
         }
     }
 </script>

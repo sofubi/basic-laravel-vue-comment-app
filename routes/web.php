@@ -15,4 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
 
-Route::get('/comments', 'App\Http\Controllers\CommentController@index');
+Route::get('/users', 'App\Http\Controllers\UsersController@index');
+
+Route::namespace('App\Http\Controllers')
+    ->prefix('/comments')
+    ->group(function() {
+        Route::get('/', 'CommentController@index');
+        Route::post('/', 'CommentController@store');
+        Route::post('/reply', 'ReplyController@store');
+        Route::post('/reply/sub', 'SubReplyController@store');
+    });
+

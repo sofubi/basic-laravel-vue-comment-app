@@ -28,6 +28,15 @@ class Comment extends Model
     ];
 
     /**
+     * Accessors to append to the model's array form
+     *
+     * @var array
+     */
+    protected $appends = [
+        'username'
+    ];
+
+    /**
      * Return the comment <-> reply relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -35,5 +44,25 @@ class Comment extends Model
     public function replies()
     {
         return $this->hasMany('App\Models\Reply');
+    }
+
+    /**
+     * Return the comment <-> user relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    /**
+     * Returns associated user's name
+     *
+     * @return string
+     */
+    public function getUsernameAttribute()
+    {
+        return $this->user->name;
     }
 }

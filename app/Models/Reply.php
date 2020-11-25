@@ -19,6 +19,15 @@ class Reply extends Model
     ];
 
     /**
+     * Accessors to append to the model's array form
+     *
+     * @var array
+     */
+    protected $appends = [
+        'username'
+    ];
+
+    /**
      * Return the reply <-> sub_reply relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -26,5 +35,25 @@ class Reply extends Model
     public function sub_replies()
     {
         return $this->hasMany('App\Models\SubReply');
+    }
+
+    /**
+     * Return the comment <-> user relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    /**
+     * Returns associated user's name
+     *
+     * @return string
+     */
+    public function getUsernameAttribute()
+    {
+        return $this->user->name;
     }
 }

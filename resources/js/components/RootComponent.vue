@@ -2,12 +2,13 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-offset-3">
-                <div v-for="(comment, key) in comments" :key="key">
+                <div v-for="(comment, key) in allComments" :key="key">
                     <div>
                         <span>{{ comment.username }}</span>
                         <hr>
                         <p>{{ comment.content }}</p>
-                        <button>Reply</button>
+                        <textarea name="" id="" cols="30" rows="10"></textarea>
+                        <button @click="replyToComment">Reply</button>
                         <div class="row">
                             <span v-if="comment.replies.length > 0">Replies: </span>
                             <div class="col-12 border" v-for="(reply, key) in comment.replies" :key="key">
@@ -22,6 +23,11 @@
                         </div>
                     </div>
                 </div>
+                <select name="" id="" v-model="selectedCommentUser">
+                    <option v-for="(user, key) in users" :key="key" :value="user.id">{{ user.name }}</option>
+                </select>
+                <textarea v-model="newComment" name="" id="" cols="30" rows="10"></textarea>
+                <button @click="createComment">Comment</button>
             </div>
         </div>
     </div>
@@ -36,8 +42,16 @@
         },
         data() {
             return {
+                users: [],
                 comments: [], 
-                errors: []
+                errors: [],
+                selectedCommentUser: '',
+                newComment: ''
+            }
+        },
+        computed: {
+            allComments: function() {
+                return this.comments;
             }
         },
         methods: {
@@ -66,6 +80,24 @@
                             }
                         )
                     }) 
+            },
+            createComment: function() {
+                return axios.post('/comments', {
+                    user_id: this.selectedCommentUser,
+                    comment: this.newComment
+                })
+                    .then((res) => {
+                    }).catch((err) => {
+                        this.errors.push(
+                            {
+                                reason: err,
+                                message: "There was an error creating your comment"
+                            }
+                        )
+                    })
+            },
+            replyToComment: function() {
+                
             }
         }
     }

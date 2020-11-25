@@ -31,11 +31,14 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         try {
-            User::find($request->user_id)
+            $comment = User::find($request->user_id)
                 ->comments()
                 ->create([
                     'content' => $request->comment
                 ]);
+
+            return response()->json($comment);
+
         } catch (Exception $e) {
             Log::error("Comment Storage Exception: \n $e");
             // For the sake of fun and to move quickly I'll use error 41
